@@ -22,18 +22,12 @@ object WordCount {
 
     val tokenized: DataSet[(String, Int)] = filtered.map(new Tokenizer())
 
-    if (params.has("output")) {
-      tokenized.writeAsCsv(params.get("output"), "\n", " ")
-      env.execute("Scala WordCount Example")
-    } else {
-      println("Printing result to stdout. Use --output to specify output path.")
-      tokenized.print()
-    }
+    tokenized.print()
   }
 
   class Tokenizer() extends MapFunction[String, (String, Int)] {
     override def map(value: String): (String, Int) = {
-      new Tuple2[String, Int](value, 1)
+        (value, 1)
     }
   }
 }
