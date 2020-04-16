@@ -80,6 +80,7 @@ fabric.properties
 # .idea/misc.xml
 # *.ipr
 .idea/
+project/
 # Sonarlint plugin
 .idea/**/sonarlint/
 
