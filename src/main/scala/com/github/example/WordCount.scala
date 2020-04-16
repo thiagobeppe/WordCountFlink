@@ -21,8 +21,8 @@ object WordCount {
     })
 
     val tokenized: DataSet[(String, Int)] = filtered.map(new Tokenizer())
-
-    tokenized.print()
+    val counts: DataSet[(String, Int)] = tokenized.groupBy(0).sum(1)
+    counts.print()
   }
 
   class Tokenizer() extends MapFunction[String, (String, Int)] {
