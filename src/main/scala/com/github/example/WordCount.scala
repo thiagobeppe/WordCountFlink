@@ -2,7 +2,7 @@ package com.github.example
 
 import org.apache.flink.api.common.functions.{FilterFunction, MapFunction}
 import org.apache.flink.api.java.utils.ParameterTool
-import org.apache.flink.api.scala.{DataSet, ExecutionEnvironment}
+import org.apache.flink.api.scala._
 
 object WordCount {
   def main(args: Array[String]): Unit = {
@@ -19,19 +19,22 @@ object WordCount {
         value.startsWith("N")
       }
     })
-    val mapped : DataSet[(String,Int)] = filtered.map(new Tokenizer())
+
+    val tokenized: DataSet[(String, Int)] = filtered.map(new Tokenizer())
 
     if (params.has("output")) {
-      filtered.writeAsCsv(params.get("output"), "\n", " ")
+      tokenized.writeAsCsv(params.get("output"), "\n", " ")
       env.execute("Scala WordCount Example")
     } else {
       println("Printing result to stdout. Use --output to specify output path.")
-      filtered.print()
+      tokenized.print()
     }
   }
-//  class Tokenizer() extends MapFunction[String, (String,Int)] {
-//    override def map(value: String): (String, Int) = {
-//      new Tuple2[String, Int](value,1)
-//    }
-//  }
+
+  class Tokenizer() extends MapFunction[String, (String, Int)] {
+    override def map(value: String): (String, Int) = {
+      new Tuple2[String, Int](value, 1)
+    }
+  }
 }
+
